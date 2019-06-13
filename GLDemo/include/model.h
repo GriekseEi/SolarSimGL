@@ -62,16 +62,16 @@ public:
 	}
 
 	// draws the model, and thus all its meshes
-	void Draw(Shader& shader, GLuint depthCubemap, vector<Texture>* textures)
+	void Draw(Shader& shader, GLuint depthCubemap, vector<Texture>& textures)
 	{
 		// bind appropriate textures
 		GLuint i = 0;
-		for (i; i < textures->size(); i++)
+		for (i; i < textures.size(); i++)
 		{
 			glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
 			// retrieve texture number (the N in diffuse_textureN)
 			string name;
-			switch (textures->at(i).type) {
+			switch (textures[i].type) {
 			case TEX_DIFFUSE:
 				name = "material.diffuse";
 				break;
@@ -86,7 +86,7 @@ public:
 			// now set the sampler to the correct texture unit
 			glUniform1i(glGetUniformLocation(shader.ID, name.c_str()), i);
 			// and finally bind the texture
-			glBindTexture(GL_TEXTURE_2D, textures->at(i).id);
+			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
 		if (depthCubemap) {
 			glActiveTexture(GL_TEXTURE0 + i);

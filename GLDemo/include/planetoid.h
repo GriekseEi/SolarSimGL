@@ -11,10 +11,14 @@ enum PlanetType { P_SUN, P_PLANET };
 
 class Planetoid {
 public:
+	Model* base;
+	vector<Texture> textures;
+	glm::mat4 instanceMatrix;
 	glm::vec3 position;
+	vector<Planetoid> children;
 	bool turning;
 
-	Planetoid(Model* model, glm::vec3& startingPos, vector<Texture>* textures, float radius, float size, float orbitSpeed, float rotationSpeed, PlanetType type) {
+	Planetoid(Model* model, glm::vec3& startingPos, vector<Texture>& textures, float radius, float size, float orbitSpeed, float rotationSpeed, PlanetType type) {
 		this->base = model;
 		this->textures = textures;
 		this->orbitSpeed = orbitSpeed;
@@ -27,46 +31,31 @@ public:
 		instanceMatrix = glm::mat4(1.0f);
 		instanceMatrix = glm::scale(instanceMatrix, glm::vec3(size));
 		instanceMatrix = glm::translate(instanceMatrix, position);
-		position = glm::vec3(instanceMatrix[3]);
 	}
 
 	void Draw(Shader& shader, GLuint depthCubemap, float& deltaTime, glm::vec3& origin) {
 
-		/*
 		instanceMatrix = glm::translate(instanceMatrix, glm::vec3(-radius - origin.x, -origin.y, -origin.z));
 		instanceMatrix = glm::rotate(instanceMatrix, glm::radians(orbitSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
 		instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius + origin.x, origin.y, origin.z));
 		position = glm::vec3(instanceMatrix[3]);
-		*/
 
+		shader.setMat4("model", instanceMatrix);
 		if (type == P_SUN) {
-			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(rotationSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
 			shader.setBool("isSun", true);
 		} else {
-			instanceMatrix = glm::translate(instanceMatrix, glm::vec3(-radius - origin.x, -origin.y, -origin.z));
-			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(orbitSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
-			instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius + origin.x, origin.y, origin.z));
-			position = glm::vec3(instanceMatrix[3]);
 			shader.setBool("isSun", false);
 		}
-		shader.setMat4("model", instanceMatrix);
 		base->Draw(shader, depthCubemap, textures);
 
-		for (Planetoid* planet : children) {
-			planet->Draw(shader, NULL, deltaTime, position);
+		for (Planetoid planet : children) {
+			planet.Draw(shader, depthCubemap, deltaTime, position);
 		}
-	}
 
-	void addPlanetoid(Planetoid* planet) {
-		children.push_back(planet);
 	}
 
 private:
 	float orbitSpeed, rotationSpeed, radius;
-	glm::mat4 instanceMatrix;
 	PlanetType type;
-	vector<Planetoid*> children;
-	Model* base;
-	vector<Texture>* textures;
 };
 #endif
