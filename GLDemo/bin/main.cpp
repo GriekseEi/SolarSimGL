@@ -44,7 +44,6 @@ static void glfwError(int id, const char* description)
 
 const unsigned int WINDOW_WIDTH = 800;
 const unsigned int WINDOW_HEIGHT = 600;
-vector<Planetoid> planets;
 
 Camera camera(0.0f, 61.0f, 0.0f, 0, 1, 0, -88.9f, 180.6);
 float lastX = (float)WINDOW_WIDTH / 2.0;
@@ -105,15 +104,18 @@ int main() {
 	Model base("./bin/models/newsphere.obj");
 	vector<vector<Texture>> textureAtlas = loadTextureAtlas("./bin/textures/planets/");
 
-	glm::vec3 origin = glm::vec3(0, 0, 0);
-	planets.push_back(Planetoid(&base, origin, textureAtlas[0], 0, 3.0f, 0.0f, 5.0f, P_SUN)); //0 - sun
+	glm::vec3 origin = glm::vec3(1);
+	Planetoid sun = Planetoid(&base, origin, &textureAtlas[0], 0, 3.0f, 0.0f, 35.0f, P_SUN);
+	Planetoid mercury = Planetoid(&base, sun.position, &textureAtlas[1], 15.0f, 0.3f, 25.0f, 90.0f, P_PLANET);
+	Planetoid venus = Planetoid(&base, sun.position, &textureAtlas[2], 20.0f, 0.4f, 20.0f, 80.0f, P_PLANET);
+	Planetoid earth = Planetoid(&base, sun.position, &textureAtlas[3], 28.0f, 0.7f, 15.0f, 50.0f, P_PLANET);
+	Planetoid moon = Planetoid(&base, earth.position, &textureAtlas[4], 2.0f, 2.0f, 40.0f, 90.0f, P_PLANET);
 
-	planets[0].children.push_back(Planetoid(&base, planets[0].position, textureAtlas[1], 15.0f, 0.5f, 25.0f, 90.0f, P_PLANET)); //1 - mercury
-	planets[0].children.push_back(Planetoid(&base, planets[0].position, textureAtlas[2], 20.0f, 0.6f, 20.0f, 80.0f, P_PLANET)); //2 - venus
-	planets[0].children.push_back(Planetoid(&base, planets[0].position, textureAtlas[3], 28.0f, 1.0f, 15.0f, 50.0f, P_PLANET)); //3 - earth
-
-	planets[0].children[2].children.push_back(Planetoid(&base, planets[0].children[2].position, textureAtlas[4], 2.0f, 0.2f, 40.0f, 90.0f, P_PLANET)); //4 - moon
-
+	sun.addPlanetoid(&mercury);
+	sun.addPlanetoid(&venus);
+	sun.addPlanetoid(&earth);
+	earth.addPlanetoid(&moon);
+	
 	float skyboxVertices[] = {
 		// positions          
 		-1.0f,  1.0f, -1.0f,
@@ -210,33 +212,6 @@ int main() {
 
 		ImGui::Render();
 
-		/**glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		float near_plane = 1.0f;
-		float far_plane = 25.0f;
-		glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, near_plane, far_plane);
-		std::vector<glm::mat4> shadowTransforms;
-		shadowTransforms.push_back(shadowProj * glm::lookAt(planets[0].position, planets[0].position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(planets[0].position, planets[0].position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(planets[0].position, planets[0].position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(planets[0].position, planets[0].position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(planets[0].position, planets[0].position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(planets[0].position, planets[0].position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-
-		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-		depthShader.use();
-		for (GLuint i = 0; i < 6; i++)
-			depthShader.setMat4("shadowMatrices[" + to_string(i) = "]", shadowTransforms[i]);
-		depthShader.setFloat("far_plane", far_plane);
-		depthShader.setVec3("lightPos", planets[0].position);
-		for (GLuint i = 1; i < planets.size(); i++)
-			planets[i].Draw(depthShader, NULL, deltaTime);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);**/
-
 		frameBuffer.enable();
 
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -246,7 +221,7 @@ int main() {
 		sphereShader.use();
 		
 		//set lighting properties
-		sphereShader.setVec3("light.position", planets[0].position);
+		sphereShader.setVec3("light.position", sun.position);
 		sphereShader.setVec3("viewPos", camera.Position);
 
 		sphereShader.setVec3("light.ambient", 0.03f, 0.03f, 0.03f);
@@ -261,9 +236,7 @@ int main() {
 		sphereShader.setMat4("view", view);
 		//sphereShader.setInt("texture_diffuse", 0);
 
-		for (Planetoid planet : planets) {
-			planet.Draw(sphereShader, NULL, deltaTime, origin);
-		}
+		sun.Draw(sphereShader, NULL, deltaTime, origin);
 
 		//skybox rendering
 		glDepthFunc(GL_LEQUAL);
