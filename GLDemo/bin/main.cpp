@@ -13,6 +13,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include <IK/irrKlang.h>
+
 #include <shader_m.h>
 #include <camera.h>
 #include <model.h>
@@ -96,7 +98,6 @@ int main() {
 
 	//compile shaders
 	Shader sphereShader("./bin/shaders/sphere_vs.glsl", "./bin/shaders/sphere_fs.glsl");
-	Shader sunShader("./bin/shaders/sun_vs.glsl", "./bin/shaders/sun_fs.glsl");
 	Shader depthShader("./bin/shaders/depthshader_vs.glsl", "./bin/shaders/depthshader_fs.glsl", "./bin/shaders/depthshader_gs.glsl");
 	Shader skyboxShader("./bin/shaders/skybox_vs.glsl", "./bin/shaders/skybox_fs.glsl");
 	Shader screenShader("./bin/shaders/screen_vs.glsl", "./bin/shaders/screen_fs.glsl");
@@ -105,16 +106,20 @@ int main() {
 	vector<vector<Texture>> textureAtlas = loadTextureAtlas("./bin/textures/planets/");
 
 	glm::vec3 origin = glm::vec3(1);
-	Planetoid sun = Planetoid(&base, origin, &textureAtlas[0], 0, 3.0f, 0.0f, 35.0f, P_SUN);
-	Planetoid mercury = Planetoid(&base, sun.position, &textureAtlas[1], 15.0f, 0.3f, 25.0f, 90.0f, P_PLANET);
-	Planetoid venus = Planetoid(&base, sun.position, &textureAtlas[2], 20.0f, 0.4f, 20.0f, 80.0f, P_PLANET);
-	Planetoid earth = Planetoid(&base, sun.position, &textureAtlas[3], 28.0f, 0.7f, 15.0f, 50.0f, P_PLANET);
-	Planetoid moon = Planetoid(&base, earth.position, &textureAtlas[4], 2.0f, 2.0f, 40.0f, 90.0f, P_PLANET);
+	Planetoid sun = Planetoid(&base, origin, &textureAtlas[0], 0, 3.0f, 0.0f, 5.0f, P_SUN);
+	Planetoid mercury = Planetoid(&base, sun.position, &textureAtlas[1], 20.0f, 0.3f, 10.0f, 90.0f, P_PLANET);
+	Planetoid venus = Planetoid(&base, sun.position, &textureAtlas[2], 28.0f, 0.4f, 15.0f, 80.0f, P_PLANET);
+	Planetoid earth = Planetoid(&base, sun.position, &textureAtlas[3], 25.0f, 0.7f, 20.0f, 50.0f, P_PLANET);
+	Planetoid moon = Planetoid(&base, earth.position, &textureAtlas[4], 10.0f, 0.1f, 40.0f, 90.0f, P_PLANET);
+	Planetoid mars = Planetoid(&base, sun.position, &textureAtlas[5], 40.0f, 0.6f, 25.0f, 40.0f, P_PLANET);
+	Planetoid jupiter = Planetoid(&base, sun.position, &textureAtlas[6], 15.0f, 2.0f, 20.0f, 30.0f, P_PLANET);
 
 	sun.addPlanetoid(&mercury);
 	sun.addPlanetoid(&venus);
 	sun.addPlanetoid(&earth);
 	earth.addPlanetoid(&moon);
+	sun.addPlanetoid(&mars);
+	sun.addPlanetoid(&jupiter);
 	
 	float skyboxVertices[] = {
 		// positions          
@@ -185,6 +190,9 @@ int main() {
 
 	FBO frameBuffer;
 	frameBuffer.init(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
+	SoundEngine->play2D("./bin/audio/foregonedestruction.mp3", GL_TRUE);
 	
 
 	//main render loop

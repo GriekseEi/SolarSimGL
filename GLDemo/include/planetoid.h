@@ -21,6 +21,7 @@ public:
 		this->rotationSpeed = rotationSpeed;
 		this->radius = radius;
 		this->type = type;
+		this->size = size;
 
 		position = glm::vec3(radius + startingPos.x, startingPos.y, startingPos.z);
 
@@ -43,9 +44,9 @@ public:
 			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(rotationSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
 			shader.setBool("isSun", true);
 		} else {
-			instanceMatrix = glm::translate(instanceMatrix, glm::vec3(-radius - origin.x, -origin.y, -origin.z));
+			//instanceMatrix[3] = glm::vec4(origin, 1.0f);
 			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(orbitSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
-			instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius + origin.x, origin.y, origin.z));
+			//instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius, 0, 0));
 			position = glm::vec3(instanceMatrix[3]);
 			shader.setBool("isSun", false);
 		}
@@ -62,7 +63,7 @@ public:
 	}
 
 private:
-	float orbitSpeed, rotationSpeed, radius;
+	float orbitSpeed, rotationSpeed, radius, size;
 	glm::mat4 instanceMatrix;
 	PlanetType type;
 	vector<Planetoid*> children;
