@@ -103,6 +103,8 @@ int main() {
 	Shader screenShader("./bin/shaders/screen_vs.glsl", "./bin/shaders/screen_fs.glsl");
 
 	Model base("./bin/models/newsphere.obj");
+	Model phobos("./bin/models/phobos.3DS");
+	Model deimos("./bin/models/deimos.3ds");
 	vector<vector<Texture>> textureAtlas = loadTextureAtlas("./bin/textures/planets/");
 
 	glm::vec3 origin = glm::vec3(1);
@@ -113,6 +115,7 @@ int main() {
 	Planetoid moon = Planetoid(&base, earth.position, &textureAtlas[4], 10.0f, 0.1f, 40.0f, 90.0f, P_PLANET);
 	Planetoid mars = Planetoid(&base, sun.position, &textureAtlas[5], 40.0f, 0.6f, 25.0f, 40.0f, P_PLANET);
 	Planetoid jupiter = Planetoid(&base, sun.position, &textureAtlas[6], 15.0f, 2.0f, 20.0f, 30.0f, P_PLANET);
+	Planetoid saturn = Planetoid(&base, sun.position, &textureAtlas[7], 28.0f, 1.5f, 20.0f, 30.0f, P_PLANET);
 
 	sun.addPlanetoid(&mercury);
 	sun.addPlanetoid(&venus);
@@ -120,6 +123,7 @@ int main() {
 	earth.addPlanetoid(&moon);
 	sun.addPlanetoid(&mars);
 	sun.addPlanetoid(&jupiter);
+	sun.addPlanetoid(&saturn);
 	
 	float skyboxVertices[] = {
 		// positions          
