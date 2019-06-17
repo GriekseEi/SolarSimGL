@@ -62,7 +62,7 @@ public:
 	}
 
 	// draws the model, and thus all its meshes
-	void Draw(Shader& shader, GLuint depthCubemap, vector<Texture>* textures)
+	void Draw(const Shader& shader, const GLuint depthCubemap, vector<Texture>* textures)
 	{
 		// bind appropriate textures
 		GLuint i = 0;
@@ -88,7 +88,8 @@ public:
 			// and finally bind the texture
 			glBindTexture(GL_TEXTURE_2D, textures->at(i).id);
 		}
-		if (depthCubemap) {
+
+		if (depthCubemap != 0) {
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
 		}

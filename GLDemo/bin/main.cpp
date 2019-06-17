@@ -103,25 +103,29 @@ int main() {
 	Shader screenShader("./bin/shaders/screen_vs.glsl", "./bin/shaders/screen_fs.glsl");
 
 	Model base("./bin/models/newsphere.obj");
-	Model phobos("./bin/models/phobos.3DS");
-	Model deimos("./bin/models/deimos.3ds");
+	Model phobos_base("./bin/models/phobos.3DS");
+	Model deimos_base("./bin/models/deimos.3ds");
 	vector<vector<Texture>> textureAtlas = loadTextureAtlas("./bin/textures/planets/");
 
-	glm::vec3 origin = glm::vec3(1);
+	glm::vec3 origin = glm::vec3(0);
 	Planetoid sun = Planetoid(&base, origin, &textureAtlas[0], 0, 3.0f, 0.0f, 5.0f, P_SUN);
 	Planetoid mercury = Planetoid(&base, sun.position, &textureAtlas[1], 20.0f, 0.3f, 10.0f, 90.0f, P_PLANET);
-	Planetoid venus = Planetoid(&base, sun.position, &textureAtlas[2], 28.0f, 0.4f, 15.0f, 80.0f, P_PLANET);
-	Planetoid earth = Planetoid(&base, sun.position, &textureAtlas[3], 25.0f, 0.7f, 20.0f, 50.0f, P_PLANET);
-	Planetoid moon = Planetoid(&base, earth.position, &textureAtlas[4], 10.0f, 0.1f, 40.0f, 90.0f, P_PLANET);
-	Planetoid mars = Planetoid(&base, sun.position, &textureAtlas[5], 40.0f, 0.6f, 25.0f, 40.0f, P_PLANET);
-	Planetoid jupiter = Planetoid(&base, sun.position, &textureAtlas[6], 15.0f, 2.0f, 20.0f, 30.0f, P_PLANET);
-	Planetoid saturn = Planetoid(&base, sun.position, &textureAtlas[7], 28.0f, 1.5f, 20.0f, 30.0f, P_PLANET);
+	Planetoid venus = Planetoid(&base, sun.position, &textureAtlas[2], 28.0f, 0.4f, 13.0f, 80.0f, P_PLANET);
+	Planetoid earth = Planetoid(&base, sun.position, &textureAtlas[3], 25.0f, 0.7f, 15.0f, 50.0f, P_PLANET);
+	Planetoid moon = Planetoid(&base, earth.position, &textureAtlas[4], 10.0f, 0.1f, 20.0f, 70.0f, P_PLANET);
+	Planetoid mars = Planetoid(&base, sun.position, &textureAtlas[5], 40.0f, 0.6f, 23.0f, 50.0f, P_PLANET);
+	Planetoid deimos = Planetoid(&deimos_base, mars.position, &textureAtlas[6], 10.0f, 0.04f, 30.0f, 60.0f, P_PLANET);
+	Planetoid phobos = Planetoid(&phobos_base, mars.position, &textureAtlas[7], 15.0f, 0.03f, 24.0f, 35.0f, P_PLANET);
+	Planetoid jupiter = Planetoid(&base, sun.position, &textureAtlas[8], 20.0f, 2.0f, 8.0f, 45.0f, P_PLANET);
+	Planetoid saturn = Planetoid(&base, sun.position, &textureAtlas[9], 40.0f, 1.5f, 10.0f, 30.0f, P_PLANET);
 
 	sun.addPlanetoid(&mercury);
 	sun.addPlanetoid(&venus);
 	sun.addPlanetoid(&earth);
 	earth.addPlanetoid(&moon);
 	sun.addPlanetoid(&mars);
+	mars.addPlanetoid(&deimos);
+	mars.addPlanetoid(&phobos);
 	sun.addPlanetoid(&jupiter);
 	sun.addPlanetoid(&saturn);
 	
@@ -193,7 +197,7 @@ int main() {
 	skyboxShader.setInt("skybox", 0);
 
 	FBO frameBuffer;
-	frameBuffer.init(WINDOW_WIDTH, WINDOW_HEIGHT);
+	frameBuffer.init(WINDOW_WIDTH, WINDOW_HEIGHT, sun.position);
 
 	irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
 	SoundEngine->play2D("./bin/audio/foregonedestruction.mp3", GL_TRUE);
@@ -208,23 +212,9 @@ int main() {
 
 		processInput(window);
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		{
-			ImGui::Begin("Camera Info");
-			ImGui::Text("Camera Position: %d", glm::to_string(camera.Position).c_str());
-			ImGui::Text("Camera Front: %d", glm::to_string(camera.Front).c_str());
-			ImGui::Text("Camera Up: %d", glm::to_string(camera.Up).c_str());
-			ImGui::Text("Camera Right: %d", glm::to_string(camera.Right).c_str());
-			ImGui::Text("Application average 5.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-			ImGui::End();
-		}
-
-		ImGui::Render();
-
 		frameBuffer.enable();
+		frameBuffer.renderToDepthCubemap(depthShader, sun.position);
+		sun.Draw(depthShader, frameBuffer.m_depth, deltaTime, origin);
 
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -243,12 +233,13 @@ int main() {
 		sphereShader.setFloat("light.quadratic", 0.000014f);
 		sphereShader.setFloat("material.shininess", 8.0f);
 		sphereShader.setInt("shadows", shadows);
+		sphereShader.setFloat("far_plane", frameBuffer.far_plane);
 
 		sphereShader.setMat4("projection", projection);
 		sphereShader.setMat4("view", view);
-		//sphereShader.setInt("texture_diffuse", 0);
 
-		sun.Draw(sphereShader, NULL, deltaTime, origin);
+		//draw the Sun and all its children
+		sun.Draw(sphereShader, 0, deltaTime, origin);
 
 		//skybox rendering
 		glDepthFunc(GL_LEQUAL);

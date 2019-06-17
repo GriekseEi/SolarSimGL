@@ -11,6 +11,7 @@ out VS_OUT {
 	vec3 TangentLightPos;
 	vec3 TangentViewPos;
 	vec3 TangentFragPos;
+	vec3 Normal;
 } vs_out;
 
 uniform mat4 view;
@@ -26,6 +27,7 @@ void main() {
 	vs_out.TexCoords = aTexCoords;
 	if (!isSun) {
 		vs_out.FragPos = vec3(model * vec4(aPos, 1.0));
+		vs_out.Normal = aNormal;
 
 		mat3 normalMatrix = transpose(inverse(mat3(model)));
 		vec3 T = normalize(normalMatrix * aTangent);

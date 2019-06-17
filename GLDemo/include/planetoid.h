@@ -31,22 +31,16 @@ public:
 		position = glm::vec3(instanceMatrix[3]);
 	}
 
-	void Draw(Shader& shader, GLuint depthCubemap, float& deltaTime, glm::vec3& origin) {
-
-		/*
-		instanceMatrix = glm::translate(instanceMatrix, glm::vec3(-radius - origin.x, -origin.y, -origin.z));
-		instanceMatrix = glm::rotate(instanceMatrix, glm::radians(orbitSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
-		instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius + origin.x, origin.y, origin.z));
-		position = glm::vec3(instanceMatrix[3]);
-		*/
+	void Draw(const Shader& shader, const GLuint& depthCubemap, float& deltaTime, glm::vec3& origin) {
 
 		if (type == P_SUN) {
 			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(rotationSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
 			shader.setBool("isSun", true);
 		} else {
-			//instanceMatrix[3] = glm::vec4(origin, 1.0f);
+			instanceMatrix[3] = glm::vec4(origin, 1.0f);
 			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(orbitSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
-			//instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius, 0, 0));
+			instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius, 0, 0));
+			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(rotationSpeed * deltaTime), glm::vec3(0, 1, 0));
 			position = glm::vec3(instanceMatrix[3]);
 			shader.setBool("isSun", false);
 		}
@@ -54,7 +48,7 @@ public:
 		base->Draw(shader, depthCubemap, textures);
 
 		for (Planetoid* planet : children) {
-			planet->Draw(shader, NULL, deltaTime, position);
+			planet->Draw(shader, depthCubemap, deltaTime, position);
 		}
 	}
 

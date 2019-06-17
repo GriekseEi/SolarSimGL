@@ -36,6 +36,7 @@ uniform samplerCube depthMap;
 uniform float far_plane;
 uniform bool shadows;
 uniform bool isSun;
+uniform bool normalEnabled;
 
 float ShadowCalculation(vec3 fragPos) {
 	vec3 fragToLight = fragPos - light.position;
@@ -54,10 +55,8 @@ float ShadowCalculation(vec3 fragPos) {
 void main() {
 	if (!isSun) {
 		vec3 color = texture(material.diffuse, fs_in.TexCoords).rgb;
-		//vec3 normal = normalize(fs_in.Normal);
 		vec3 normal = texture(material.normal, fs_in.TexCoords).rgb;
 		normal = normalize(normal * 2.0 - 1.0);
-
 
 		//ambient
 		vec3 ambient = light.ambient * color;
