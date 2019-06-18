@@ -90,8 +90,8 @@ public:
 		}
 
 		if (depthCubemap != 0) {
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
+			//glActiveTexture(GL_TEXTURE0 + i);
+			//glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
 		}
 		
 

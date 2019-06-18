@@ -213,8 +213,8 @@ int main() {
 		processInput(window);
 
 		frameBuffer.enable();
-		frameBuffer.renderToDepthCubemap(depthShader, sun.position);
-		sun.Draw(depthShader, frameBuffer.m_depth, deltaTime, origin);
+		//frameBuffer.renderToDepthCubemap(depthShader, sun.position);
+		//sun.Draw(depthShader, frameBuffer.m_depth, deltaTime, origin);
 
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

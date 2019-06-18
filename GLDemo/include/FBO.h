@@ -23,6 +23,7 @@ public:
 
 private:
 	GLuint m_FBO;
+	GLuint m_shadowFBO;
 	GLuint m_scrVAO;
 	GLuint m_scrVBO;
 	GLuint m_TCB;
