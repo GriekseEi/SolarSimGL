@@ -1,8 +1,3 @@
-#define IMGUI_IMPL_OPENGL_LOADER_GLAD
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_glfw.h>
-#include <imgui/imgui_impl_opengl3.h>
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
@@ -20,6 +15,7 @@
 #include <model.h>
 #include <planetoid.h>
 #include <FBO.h>
+#include <HUD.h>
 
 #include <iostream>
 #include <string>
@@ -86,23 +82,19 @@ int main() {
 		return -1;
 	}
 
-	const char* glsl_version = "#version 330 core";
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init(glsl_version);
-
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//compile shaders
 	Shader sphereShader("./bin/shaders/sphere_vs.glsl", "./bin/shaders/sphere_fs.glsl");
 	Shader depthShader("./bin/shaders/depthshader_vs.glsl", "./bin/shaders/depthshader_fs.glsl", "./bin/shaders/depthshader_gs.glsl");
 	Shader skyboxShader("./bin/shaders/skybox_vs.glsl", "./bin/shaders/skybox_fs.glsl");
 	Shader screenShader("./bin/shaders/screen_vs.glsl", "./bin/shaders/screen_fs.glsl");
+	Shader hudShader("./bin/shaders/hud_vs.glsl", "./bin/shaders/hud_fs.glsl");
 
 	Model base("./bin/models/newsphere.obj");
+	Model saturn_ring("./bin/models/ring.obj");
 	Model phobos_base("./bin/models/phobos.3DS");
 	Model deimos_base("./bin/models/deimos.3ds");
 	vector<vector<Texture>> textureAtlas = loadTextureAtlas("./bin/textures/planets/");
@@ -117,7 +109,8 @@ int main() {
 	Planetoid deimos = Planetoid(&deimos_base, mars.position, &textureAtlas[6], 10.0f, 0.04f, 30.0f, 60.0f, P_PLANET);
 	Planetoid phobos = Planetoid(&phobos_base, mars.position, &textureAtlas[7], 15.0f, 0.03f, 24.0f, 35.0f, P_PLANET);
 	Planetoid jupiter = Planetoid(&base, sun.position, &textureAtlas[8], 20.0f, 2.0f, 8.0f, 45.0f, P_PLANET);
-	Planetoid saturn = Planetoid(&base, sun.position, &textureAtlas[9], 40.0f, 1.5f, 10.0f, 30.0f, P_PLANET);
+	Planetoid saturn = Planetoid(&base, sun.position, &textureAtlas[9], 25.0f, 1.5f, 6.0f, 30.0f, P_PLANET);
+	Planetoid saturnRing = Planetoid(&saturn_ring, saturn.position, &textureAtlas[10], 0.0f, 4.0f, 0.0f, 0.0f, P_PLANET);
 
 	sun.addPlanetoid(&mercury);
 	sun.addPlanetoid(&venus);
@@ -128,6 +121,7 @@ int main() {
 	mars.addPlanetoid(&phobos);
 	sun.addPlanetoid(&jupiter);
 	sun.addPlanetoid(&saturn);
+	saturn.addPlanetoid(&saturnRing);
 	
 	float skyboxVertices[] = {
 		// positions          
@@ -202,6 +196,14 @@ int main() {
 	irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
 	SoundEngine->play2D("./bin/audio/foregonedestruction.mp3", GL_TRUE);
 	
+	glm::mat4 hud_projection = glm::ortho(0.0f, static_cast<GLfloat>(WINDOW_WIDTH), 0.0f, static_cast<GLfloat>(WINDOW_HEIGHT));
+	hudShader.use();
+	glUniformMatrix4fv(glGetUniformLocation(hudShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(hud_projection));
+	HUD hud("./bin/fonts/arial.ttf");
+
+	float lastTime = glfwGetTime();
+	int frameCount = 0;
+	int oldFrameCount = 1;
 
 	//main render loop
 	while (!glfwWindowShouldClose(window)) {
@@ -209,6 +211,7 @@ int main() {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+		frameCount++;
 
 		processInput(window);
 
@@ -218,12 +221,13 @@ int main() {
 
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
 		sphereShader.use();
 		
 		//set lighting properties
-		sphereShader.setVec3("light.position", sun.position);
+		sphereShader.setVec3("light.position", glm::vec3(1));
 		sphereShader.setVec3("viewPos", camera.Position);
 
 		sphereShader.setVec3("light.ambient", 0.03f, 0.03f, 0.03f);
@@ -255,6 +259,16 @@ int main() {
 		glBindVertexArray(0);
 		glDepthFunc(GL_LESS);
 
+		if (currentFrame - lastTime >= 1.0) {
+			oldFrameCount = frameCount;
+			frameCount = 0;
+			lastTime += 1.0;
+		}
+		hud.RenderText(hudShader,
+			std::to_string(oldFrameCount) + " FPS, " + std::to_string(1000.0 / double(oldFrameCount)) + " ms/frame",
+			5.0f, 5.0f, 0.25f, glm::vec3(0.5, 0.8, 0.2f)
+		);
+
 		frameBuffer.drawTextureQuad(screenShader);
 
 		glfwSwapBuffers(window);
@@ -264,11 +278,6 @@ int main() {
 	//deallocate resources on program closure
 	glDeleteVertexArrays(1, &skyboxVAO);
 	glDeleteBuffers(1, &skyboxVBO);
-
-
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

@@ -86,7 +86,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;irrKlang.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;irrKlang.lib;assimp-vc140-mt.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -100,7 +100,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;irrKlang.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;irrKlang.lib;assimp-vc140-mt.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,6 +135,7 @@
     <ClInclude Include="include\camera.h" />
     <ClInclude Include="include\FBO.h" />
     <ClInclude Include="include\glad\glad.h" />
+    <ClInclude Include="include\HUD.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imgui_impl_glfw.h" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="bin\FBO.cpp" />
     <ClCompile Include="bin\glad.c" />
+    <ClCompile Include="bin\HUD.cpp" />
     <ClCompile Include="bin\main.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imgui_demo.cpp" />
@@ -164,6 +166,8 @@
     <None Include="bin\shaders\depthshader_fs.glsl" />
     <None Include="bin\shaders\depthshader_gs.glsl" />
     <None Include="bin\shaders\depthshader_vs.glsl" />
+    <None Include="bin\shaders\hud_fs.glsl" />
+    <None Include="bin\shaders\hud_vs.glsl" />
     <None Include="bin\shaders\screen_fs.glsl" />
     <None Include="bin\shaders\screen_vs.glsl" />
     <None Include="bin\shaders\skybox_fs.glsl" />

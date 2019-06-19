@@ -14,7 +14,7 @@ public:
 	glm::vec3 position;
 	bool turning;
 
-	Planetoid(Model* model, glm::vec3& startingPos, vector<Texture>* textures, float radius, float size, float orbitSpeed, float rotationSpeed, PlanetType type) {
+	Planetoid(Model* model, const glm::vec3& startingPos, vector<Texture>* textures, float radius, float size, float orbitSpeed, float rotationSpeed, PlanetType type) {
 		this->base = model;
 		this->textures = textures;
 		this->orbitSpeed = orbitSpeed;
@@ -40,7 +40,7 @@ public:
 			instanceMatrix[3] = glm::vec4(origin, 1.0f);
 			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(orbitSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
 			instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius, 0, 0));
-			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(rotationSpeed * deltaTime), glm::vec3(0, 1, 0));
+			//instanceMatrix = glm::rotate(instanceMatrix, glm::radians(rotationSpeed * deltaTime), glm::vec3(0, 1, 0));
 			position = glm::vec3(instanceMatrix[3]);
 			shader.setBool("isSun", false);
 		}

@@ -72,6 +72,9 @@
     <ClInclude Include="include\FBO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\imgui\imgui.cpp">
@@ -99,6 +102,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bin\FBO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,6 +149,12 @@
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="bin\shaders\screen_fs.glsl">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="bin\shaders\hud_vs.glsl">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="bin\shaders\hud_fs.glsl">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>
