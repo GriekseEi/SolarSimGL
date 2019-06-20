@@ -111,6 +111,8 @@ int main() {
 	Planetoid jupiter = Planetoid(&base, sun.position, &textureAtlas[8], 20.0f, 2.0f, 8.0f, 45.0f, P_PLANET);
 	Planetoid saturn = Planetoid(&base, sun.position, &textureAtlas[9], 25.0f, 1.5f, 6.0f, 30.0f, P_PLANET);
 	Planetoid saturnRing = Planetoid(&saturn_ring, saturn.position, &textureAtlas[10], 0.0f, 4.0f, 0.0f, 0.0f, P_PLANET);
+	Planetoid uranus = Planetoid(&base, sun.position, &textureAtlas[11], 30.0f, 1.4f, 5.0f, 20.0f, P_PLANET);
+	Planetoid neptune = Planetoid(&base, sun.position, &textureAtlas[13], 35.0f, 1.5f, 4.0f, 25.0f, P_PLANET);
 
 	sun.addPlanetoid(&mercury);
 	sun.addPlanetoid(&venus);
@@ -122,6 +124,8 @@ int main() {
 	sun.addPlanetoid(&jupiter);
 	sun.addPlanetoid(&saturn);
 	saturn.addPlanetoid(&saturnRing);
+	sun.addPlanetoid(&uranus);
+	sun.addPlanetoid(&neptune);
 	
 	float skyboxVertices[] = {
 		// positions          
@@ -467,12 +471,12 @@ vector<vector<Texture>> loadTextureAtlas(string path) {
 					} else if (type == "s") {
 						texture.type = TEX_SPECULAR;
 					} else {
-						cout << "Failed to assign type: " << type << endl;
+						cout << "Failed to assign type to texture (" << path << ") of type: " << type << endl;
 					}
 
 					textures.push_back(texture);
 				} else {
-					std::cout << "Texture failed to load at path: " << path<< std::endl;
+					std::cout << "Texture failed to load at path: " << path << std::endl;
 					stbi_image_free(data);
 				}
 			}

@@ -16,9 +16,6 @@
     <Filter Include="Source Files\shaders">
       <UniqueIdentifier>{086bc149-6a8a-4e50-843e-fd6db9fc9e4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\imgui">
-      <UniqueIdentifier>{cb7dfff3-b216-4510-a44d-8591386f1a73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\glad">
       <UniqueIdentifier>{ce209cf7-68e6-44b9-acee-3cb5a3f8e5ef}</UniqueIdentifier>
     </Filter>
@@ -33,38 +30,11 @@
     <ClInclude Include="include\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\planetoid.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imconfig.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_glfw.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_opengl3.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui_internal.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imstb_rectpack.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imstb_textedit.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imstb_truetype.h">
-      <Filter>Header Files\imgui</Filter>
     </ClInclude>
     <ClInclude Include="include\glad\glad.h">
       <Filter>Header Files\glad</Filter>
@@ -77,24 +47,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\imgui\imgui.cpp">
-      <Filter>Header Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_demo.cpp">
-      <Filter>Header Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_draw.cpp">
-      <Filter>Header Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_impl_glfw.cpp">
-      <Filter>Header Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Header Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_widgets.cpp">
-      <Filter>Header Files\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="bin\glad.c">
       <Filter>Header Files\glad</Filter>
     </ClCompile>
@@ -113,15 +65,6 @@
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="bin\shaders\skybox_vs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\testTri_fs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\testTri_vs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\testTri_vs_hud.glsl">
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="bin\shaders\sphere_fs.glsl">

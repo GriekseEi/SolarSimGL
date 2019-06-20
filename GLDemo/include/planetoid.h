@@ -40,8 +40,8 @@ public:
 			instanceMatrix[3] = glm::vec4(origin, 1.0f);
 			instanceMatrix = glm::rotate(instanceMatrix, glm::radians(orbitSpeed * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
 			instanceMatrix = glm::translate(instanceMatrix, glm::vec3(radius, 0, 0));
-			//instanceMatrix = glm::rotate(instanceMatrix, glm::radians(rotationSpeed * deltaTime), glm::vec3(0, 1, 0));
 			position = glm::vec3(instanceMatrix[3]);
+
 			shader.setBool("isSun", false);
 		}
 		shader.setMat4("model", instanceMatrix);
@@ -60,8 +60,8 @@ private:
 	float orbitSpeed, rotationSpeed, radius, size;
 	glm::mat4 instanceMatrix;
 	PlanetType type;
-	vector<Planetoid*> children;
 	Model* base;
+	vector<Planetoid*> children;
 	vector<Texture>* textures;
 };
 #endif

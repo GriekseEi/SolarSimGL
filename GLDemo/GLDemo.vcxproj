@@ -136,15 +136,6 @@
     <ClInclude Include="include\FBO.h" />
     <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\HUD.h" />
-    <ClInclude Include="include\imgui\imconfig.h" />
-    <ClInclude Include="include\imgui\imgui.h" />
-    <ClInclude Include="include\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="include\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="include\imgui\imgui_internal.h" />
-    <ClInclude Include="include\imgui\imstb_rectpack.h" />
-    <ClInclude Include="include\imgui\imstb_textedit.h" />
-    <ClInclude Include="include\imgui\imstb_truetype.h" />
-    <ClInclude Include="include\mesh.h" />
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\planetoid.h" />
     <ClInclude Include="include\shader_m.h" />
@@ -155,12 +146,6 @@
     <ClCompile Include="bin\glad.c" />
     <ClCompile Include="bin\HUD.cpp" />
     <ClCompile Include="bin\main.cpp" />
-    <ClCompile Include="include\imgui\imgui.cpp" />
-    <ClCompile Include="include\imgui\imgui_demo.cpp" />
-    <ClCompile Include="include\imgui\imgui_draw.cpp" />
-    <ClCompile Include="include\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="include\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\shaders\depthshader_fs.glsl" />
@@ -176,9 +161,6 @@
     <None Include="bin\shaders\sphere_vs.glsl" />
     <None Include="bin\shaders\sun_fs.glsl" />
     <None Include="bin\shaders\sun_vs.glsl" />
-    <None Include="bin\shaders\testTri_fs.glsl" />
-    <None Include="bin\shaders\testTri_vs.glsl" />
-    <None Include="bin\shaders\testTri_vs_hud.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
