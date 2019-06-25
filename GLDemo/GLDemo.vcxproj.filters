@@ -45,6 +45,9 @@
     <ClInclude Include="include\HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bin\glad.c">
@@ -59,6 +62,15 @@
     <ClCompile Include="bin\HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bin\skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\planetoid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\shaders\skybox_fs.glsl">
@@ -71,21 +83,6 @@
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="bin\shaders\sphere_vs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\sun_fs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\sun_vs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\depthshader_vs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\depthshader_fs.glsl">
-      <Filter>Source Files\shaders</Filter>
-    </None>
-    <None Include="bin\shaders\depthshader_gs.glsl">
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="bin\shaders\screen_vs.glsl">

@@ -4,31 +4,31 @@
 #include <glad/glad.h>
 #include <shader_m.h>
 
-#include <vector>
-
 class FBO {
 public:
-	const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-	GLuint m_depth;
-	GLuint m_shadowMap;
-	float far_plane;
-
-	FBO();
+	FBO(const GLuint& windowWidth, const GLuint& windowHeight, glm::vec3& lightPos);
 	~FBO();
 
-	void init(GLuint windowWidth, GLuint windowHeight, glm::vec3& lightPos);
-	void renderToDepthCubemap(Shader& shader, glm::vec3& lightPos);
 	void drawTextureQuad(Shader& shader);
 	void enable();
 
 private:
 	GLuint m_FBO;
-	GLuint m_shadowFBO;
 	GLuint m_scrVAO;
 	GLuint m_scrVBO;
 	GLuint m_TCB;
 	GLuint m_RBO;
-	std::vector<glm::mat4> shadowTransforms;
+
+	float quadVertices[24] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+	// positions   // texCoords
+	-1.0f,  1.0f,   0.0f, 1.0f,
+	-1.0f, -1.0f,   0.0f, 0.0f,
+	 1.0f, -1.0f,   1.0f, 0.0f,
+
+	-1.0f,  1.0f,   0.0f, 1.0f,
+	 1.0f, -1.0f,   1.0f, 0.0f,
+	 1.0f,  1.0f,   1.0f, 1.0f
+	};
 };
 
 #endif

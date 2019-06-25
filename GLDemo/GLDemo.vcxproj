@@ -70,10 +70,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)GLDemo\output</OutDir>
+    <OutDir>$(SolutionDir)GLDemo\output\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)GLDemo\output</OutDir>
+    <OutDir>$(SolutionDir)GLDemo\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,6 +139,7 @@
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\planetoid.h" />
     <ClInclude Include="include\shader_m.h" />
+    <ClInclude Include="include\skybox.h" />
     <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
@@ -146,11 +147,11 @@
     <ClCompile Include="bin\glad.c" />
     <ClCompile Include="bin\HUD.cpp" />
     <ClCompile Include="bin\main.cpp" />
+    <ClCompile Include="bin\model.cpp" />
+    <ClCompile Include="bin\planetoid.cpp" />
+    <ClCompile Include="bin\skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\shaders\depthshader_fs.glsl" />
-    <None Include="bin\shaders\depthshader_gs.glsl" />
-    <None Include="bin\shaders\depthshader_vs.glsl" />
     <None Include="bin\shaders\hud_fs.glsl" />
     <None Include="bin\shaders\hud_vs.glsl" />
     <None Include="bin\shaders\screen_fs.glsl" />
@@ -159,8 +160,6 @@
     <None Include="bin\shaders\skybox_vs.glsl" />
     <None Include="bin\shaders\sphere_fs.glsl" />
     <None Include="bin\shaders\sphere_vs.glsl" />
-    <None Include="bin\shaders\sun_fs.glsl" />
-    <None Include="bin\shaders\sun_vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

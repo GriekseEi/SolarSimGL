@@ -33,24 +33,7 @@ uniform Material material;
 uniform Light light;
 uniform samplerCube depthMap;
 
-uniform float far_plane;
-uniform bool shadows;
 uniform bool isSun;
-uniform bool normalEnabled;
-
-float ShadowCalculation(vec3 fragPos) {
-	vec3 fragToLight = fragPos - light.position;
-
-	float closestDepth = texture(depthMap, fragToLight).r;
-	closestDepth *= far_plane;
-	float currentDepth = length(fragToLight);
-	float bias = 0.05;
-	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
-
-	//FragColor = vec4(vec3(closestDepth / far_plane), 1.0);
-
-	return shadow;
-}
 
 void main() {
 	if (!isSun) {
@@ -82,11 +65,7 @@ void main() {
 		diffuse *= attenuation;
 		specular *= attenuation;
 
-		//shadow
-		float shadow = shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;
-		//vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 		vec3 lighting = ambient + diffuse + specular;
-
 		FragColor = vec4(lighting, 1.0);
 	} else {
 		FragColor = texture(material.diffuse, fs_in.TexCoords);

@@ -9,17 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-void FBO::init(GLuint windowWidth, GLuint windowHeight, glm::vec3& lightPos) {
-	float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-		// positions   // texCoords
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		1.0f, -1.0f,   1.0f, 0.0f,
-
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		1.0f, -1.0f,   1.0f, 0.0f,
-		1.0f,  1.0f,   1.0f, 1.0f
-	};
+FBO::FBO(const GLuint& windowWidth, const GLuint& windowHeight, glm::vec3& lightPos) {
 
 	glGenFramebuffers(1, &m_FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
@@ -54,29 +44,6 @@ void FBO::init(GLuint windowWidth, GLuint windowHeight, glm::vec3& lightPos) {
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glGenFramebuffers(1, &m_shadowFBO);
-
-	glGenTextures(1, &m_depth);
-	glBindTexture(GL_TEXTURE_2D, m_depth);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-		SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depth, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		std::cout << "Shadow framebuffer is not complete" << std::endl;
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 }
 
 void FBO::drawTextureQuad(Shader& shader) {
@@ -94,25 +61,6 @@ void FBO::drawTextureQuad(Shader& shader) {
 void FBO::enable() {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 	glEnable(GL_DEPTH_TEST);
-}
-
-void FBO::renderToDepthCubemap(Shader& shader, glm::vec3& lightPos) {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFBO);
-	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	shader.use();
-	for (GLuint i = 0; i < 6; i++)
-		shader.setMat4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
-
-	shader.setFloat("far_plane", far_plane);
-	shader.setVec3("light.position", lightPos);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-}
-
-FBO::FBO() {
-
 }
 
 FBO::~FBO() {
