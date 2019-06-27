@@ -16,9 +16,6 @@
     <Filter Include="Source Files\shaders">
       <UniqueIdentifier>{086bc149-6a8a-4e50-843e-fd6db9fc9e4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\glad">
-      <UniqueIdentifier>{ce209cf7-68e6-44b9-acee-3cb5a3f8e5ef}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\camera.h">
@@ -27,17 +24,11 @@
     <ClInclude Include="include\shader_m.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\planetoid.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\glad\glad.h">
-      <Filter>Header Files\glad</Filter>
     </ClInclude>
     <ClInclude Include="include\FBO.h">
       <Filter>Header Files</Filter>
@@ -50,9 +41,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bin\glad.c">
-      <Filter>Header Files\glad</Filter>
-    </ClCompile>
     <ClCompile Include="bin\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,6 +57,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bin\planetoid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\shader_m.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

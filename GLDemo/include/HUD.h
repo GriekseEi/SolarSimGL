@@ -15,6 +15,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+//each loaded character must contain a texture, its size, the distance between other characters, and its bearing
 struct Character {
 	GLuint textureID;
 	glm::ivec2 size;
@@ -24,9 +25,7 @@ struct Character {
 
 class HUD {
 public:
-	HUD(const char * fontPath) {
-		init(fontPath);
-	}
+	HUD(const char * fontPath);
 
 	~HUD() {
 		glDeleteVertexArrays(1, &hud_VAO);
@@ -36,10 +35,9 @@ public:
 	void RenderText(Shader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 
 private:
+	//the data for each character is mapped here to the actual written character they represent
 	std::map<GLchar, Character> Characters;
 	GLuint hud_VAO, hud_VBO;
-
-	void init(const char * fontPath);
 };
 
 #endif // !HUD_H

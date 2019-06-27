@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>810</x>
+      <y>300</y>
+      <w>500</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>GLDemo
+--
+_-WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE : char *_
+_-MUSIC_PATH, FONT_PATH, PLANET_TEXTURES_PATH : char *_
+_-SKYBOX_FACES : vector&lt;string&gt;: _
+
+-camera: Camera
+-lastX, lastY: float
+-deltaTime, lastFrame: float
+-firstMouse, turning, turnPressed: bool
+-window: GLFWwindow*
+-textureAtlas: vector&lt;vector&lt;Texture&gt;&gt;
+-sphereShader, skyboxShader, screenShader, hudShader: Shader
+-base, saturn_ring, phobos_base, deimos_base: Model
+-sun, mercury, venus, earth, moon, ..., neptune: Planetoid
+-skybox: Skybox
+-soundEngine: ISoundEngine
+-hud: HUD
+--
++main(): int
++framebuffer_size_callback(window: GLFWwindow*, width: int, height: int): void
++mouse_callback(window: GLFWwindow*, xpos: double, ypos: double): void
++scroll_callback(window: GLFWwindow*, xoffset: double, yoffset: double): void
++processInput(window: GLFWwindow*): void
++loadTextureAtlas(path: string): vector&lt;vector&lt;Texture&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1380</x>
+      <y>400</y>
+      <w>550</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>Camera
+--
+__-YAW: float__
+__-PITCH: float__
+__-SPEED: float__
+__-SENSITIVITY: float__
+__-ZOOM: float__
+
++Position, Front, Up, Right, WorldUp : vec3
++Yaw, Pitch, MovementSpeed, MouseSensitivity, Zoom: float
+--
++Camera(position: vec3, up: vec3, yaw: float, pitch: float)
++GetViewMatrix(): mat4
++ProcessKeyboard(direction: CameraMovement, deltaTime: float): void
++ProcessMouseMovement(xoffset: float, yoffset: float, constrainPitch: GLboolean): void
++ProcessMouseScroll(yoffset: float): void
+-updateCameraVectors(): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2010</x>
+      <y>480</y>
+      <w>130</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+CameraMovement
+--
+FORWARD
+BACKWARD
+LEFT
+RIGHT</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>790</y>
+      <w>460</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>FBO
+--
+-m_FBO, m_scrVAO, m_scrVBO, m_TCB, m_RBO: GLuint
+-quadVertices: float[]
+--
++FBO(windowWidth: GLuint&amp;, windowHeight: GLuint&amp;, lightPos: vec3&amp;)
++enable(): void
++drawTextureQuad(shader: Shader&amp;): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>290</x>
+      <y>260</y>
+      <w>430</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>HUD
+--
+-hud_VAO, hud_VBO: GLuint
+-Characters: map&lt;GLchar, Character&gt;
+--
++HUD(fontPath: char*)
++~HUD()
++RenderText(shader: Shader&amp;, text: string, x: GLfloat, y: GLfloat, 
+scale: GLfloat, color: vec3): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>270</y>
+      <w>190</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;struct&gt;&gt;
+Character
+--
+textureID: GLuint
+size: ivec2
+bearing: ivec2
+offset: GLuint</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1380</x>
+      <y>140</y>
+      <w>400</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>Model
+--
+-VAO, VBO, EBO: GLuint
+-vertices: vector&lt;Vertex&gt;
+-indices: vector&lt;GLuint&gt;
+--
++Model(path: string&amp;)
++~Model()
++Draw(shader: Shader&amp;, textures: vector&lt;Texture&gt;*): void
+
+-loadModel(path: string&amp;): void
+-processMesh(mesh: aiMesh*, scene: aiScene*): void
+-setupMesh(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>20</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+TexType
+--
+TEX_DIFFUSE
+TEX_NORMAL
+TEX_SPECULAR</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1900</x>
+      <y>230</y>
+      <w>120</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;struct&gt;&gt;
+Vertex
+--
+Position: vec3
+Normal: vec3
+TexCoords: vec2
+Tangent: vec3
+Bitangent: vec3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>580</x>
+      <y>40</y>
+      <w>110</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;struct&gt;&gt;
+Texture
+--
+id: GLuint
+type: TexType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>0</y>
+      <w>490</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Planetoid
+--
+-orbitSpeed, rotationSpeed, radius, size: float
+-planetTrans, planetRot, planetScale: mat4
+-light: boolean
+-base: Model*
+-textures: vector&lt;Texture&gt;*
+-children: vector&lt;Planetoid*&gt;
++position: vec3
++turning: bool
+--
++Planetoid(model: Model*, startingPos: vec3&amp;, textures: vector&lt;Texture&gt;*, 
+	radius: float, size: float, orbitSpeed: float, rotationSpeed: float, light: bool)
+	
++Draw(shader: Shader&amp;, deltaTime: float&amp;, origin: vec3&amp;, turning: bool): void
++addPlanetoid(planet: Planetoid*): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>290</x>
+      <y>440</y>
+      <w>400</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>Shader
+--
++ID: unsigned int
+--
++Shader(vertexPath: char*, fragmentPath: char*)
++use(): void
++setBool(name: string&amp;, value: bool): void
++setInt(name: string&amp;, value: int): void
++setFloat(name: string&amp;, value: float): void
++setVec2(name: string&amp;, value: vec2&amp;): void
++setVec2(name: string&amp;, x: float, y: float): void
++setVec3(name: string&amp;, value: vec3&amp;): void
++setVec3(name: string&amp;, x: float, y: float, z: float): void
++setVec4(name: string&amp;, value: vec4&amp;): void
++setVec4(name: string&amp;, x: float, y: float, z: float, w: float): void
++setMat2(name: string&amp;, mat: mat2&amp;): void
++setMat3(name: string&amp;, mat: mat3&amp;): void
++setMat4(name: string&amp;, mat: mat4&amp;): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1180</x>
+      <y>790</y>
+      <w>400</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Skybox
+--
+-skyboxVAO, skyboxVBO: GLuint
+-cubemapTex: GLuint
+-skyboxVertices: float[]
+--
++Skybox(faces: vector&lt;string&gt;)
++~Skybox()
++draw(shader: Shader&amp;, view: mat4&amp;, projection: mat4&amp;): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1770</x>
+      <y>270</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..*
+m2=1</panel_attributes>
+    <additional_attributes>130.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>70</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>40</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1920</x>
+      <y>520</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>710</x>
+      <y>330</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1280</x>
+      <y>140</y>
+      <w>120</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>100.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1300</x>
+      <y>290</y>
+      <w>100</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1..*</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>230</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>520</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1300</x>
+      <y>470</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>660</y>
+      <w>40</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1250</x>
+      <y>660</y>
+      <w>40</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>330</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>110</y>
+      <w>160</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;190.0</additional_attributes>
+  </element>
+</diagram>

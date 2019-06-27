@@ -134,13 +134,11 @@
   <ItemGroup>
     <ClInclude Include="include\camera.h" />
     <ClInclude Include="include\FBO.h" />
-    <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\HUD.h" />
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\planetoid.h" />
     <ClInclude Include="include\shader_m.h" />
     <ClInclude Include="include\skybox.h" />
-    <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bin\FBO.cpp" />
@@ -149,6 +147,7 @@
     <ClCompile Include="bin\main.cpp" />
     <ClCompile Include="bin\model.cpp" />
     <ClCompile Include="bin\planetoid.cpp" />
+    <ClCompile Include="bin\shader_m.cpp" />
     <ClCompile Include="bin\skybox.cpp" />
   </ItemGroup>
   <ItemGroup>

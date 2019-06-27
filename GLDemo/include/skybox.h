@@ -13,7 +13,7 @@ public:
 	Skybox(const std::vector<std::string>& faces);
 	~Skybox();
 
-	void draw(Shader& shader, glm::mat4 view, glm::mat4 projection);
+	void draw(Shader& shader, glm::mat4& view, glm::mat4& projection);
 
 private:
 	GLuint skyboxVAO, skyboxVBO;

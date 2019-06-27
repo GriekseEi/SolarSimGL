@@ -63,11 +63,11 @@ public:
 		return glm::lookAt(Position, Position + Front, Up);
 	}
 
-	void LookAt(glm::vec3 target) {
+	/*void LookAt(glm::vec3 target) {
 		Front = glm::normalize(Position - target);
 		Right = glm::normalize(glm::cross(glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)), Front));
 		Up = glm::normalize(glm::cross(Front, Right));
-	}
+	}*/
 
 	//Accept keyboard movement
 	void ProcessKeyboard(CameraMovement direction, float deltaTime)

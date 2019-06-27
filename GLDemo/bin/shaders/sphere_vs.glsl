@@ -24,16 +24,27 @@ uniform bool isSun;
 
 void main() {
 	vs_out.TexCoords = aTexCoords;
-	if (!isSun) {
+	if (!isSun) { //if this planetoid isn't the sun, skip the tangent matrix calculations for normal mapping
 		vs_out.FragPos = vec3(model * vec4(aPos, 1.0));
 
+		/*
+		Calculates the TBN (Tangent, Bitangent, Normal) matrix so the normals of the normal maps are 
+		aimed in the proper direction relative to the triangles they are mapped to.
+		*/
+
+		//convert the normals and tangents from local space to world space
 		mat3 normalMatrix = transpose(inverse(mat3(model)));
 		vec3 T = normalize(normalMatrix * aTangent);
 		vec3 N = normalize(normalMatrix * aNormal);
+
+		//Perform the Gram-Schmidt process to re-orthogonalize the vectors to avoid the vectors being
+		//non-perpendicular and looking slightly off in some edge cases
 		T = normalize(T - dot(T, N) * N);
 		vec3 B = cross(N, T);
 
+		//create the TBN matrix for the tangent space
 		mat3 TBN = transpose(mat3(T, B, N));
+		//output variables for the light/view/fragment positions in tangent space
 		vs_out.TangentLightPos = TBN * lightPos;
 		vs_out.TangentViewPos = TBN * viewPos;
 		vs_out.TangentFragPos = TBN * vs_out.FragPos;

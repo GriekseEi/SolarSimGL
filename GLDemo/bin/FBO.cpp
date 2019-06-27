@@ -11,6 +11,7 @@
 
 FBO::FBO(const GLuint& windowWidth, const GLuint& windowHeight, glm::vec3& lightPos) {
 
+	//create framebuffer
 	glGenFramebuffers(1, &m_FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 
@@ -25,7 +26,7 @@ FBO::FBO(const GLuint& windowWidth, const GLuint& windowHeight, glm::vec3& light
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-	//render to texture
+	//generate the texture to which the render output will be bound to
 	glGenTextures(1, &m_TCB);
 	glBindTexture(GL_TEXTURE_2D, m_TCB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
@@ -39,6 +40,7 @@ FBO::FBO(const GLuint& windowWidth, const GLuint& windowHeight, glm::vec3& light
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, windowWidth, windowHeight);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RBO);
 
+	//check if framebuffer setup was successful
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		std::cout << "Primary framebuffer is not complete" << std::endl;
 	}
@@ -46,6 +48,7 @@ FBO::FBO(const GLuint& windowWidth, const GLuint& windowHeight, glm::vec3& light
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+//clear the screen and draw the screen texture stored in the framebuffer
 void FBO::drawTextureQuad(Shader& shader) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_DEPTH_TEST);
@@ -58,6 +61,7 @@ void FBO::drawTextureQuad(Shader& shader) {
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+//set the framebuffer to be active and enable depth testing again
 void FBO::enable() {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 	glEnable(GL_DEPTH_TEST);

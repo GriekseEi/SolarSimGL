@@ -152,7 +152,7 @@ int main() {
 	irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
 	SoundEngine->play2D(MUSIC_PATH, GL_TRUE);
 	//load HUD
-	glm::mat4 hud_projection = glm::ortho(0.0f, static_cast<GLfloat>(WINDOW_WIDTH), 0.0f, static_cast<GLfloat>(WINDOW_HEIGHT));
+	glm::mat4 hud_projection = glm::ortho(0.0f, static_cast<GLfloat>(WINDOW_WIDTH), 0.0f, static_cast<GLfloat>(WINDOW_HEIGHT)); //perspective usually doesn't matter for HUD rendering so we just keep it orthographic
 	hudShader.use();
 	glUniformMatrix4fv(glGetUniformLocation(hudShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(hud_projection));
 	HUD hud(FONT_PATH);
@@ -179,7 +179,6 @@ int main() {
 		//Set the framebuffer to read input
 		frameBuffer.enable();
 		//refresh the GPU color and depth buffers so they can be rewritten
-		//glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Get the view and projection matrix from the camera
@@ -204,7 +203,7 @@ int main() {
 		//draw the Sun and all its children
 		sun.Draw(sphereShader, deltaTime, sun.position, turning);
 		//draw skybox
-		skybox.draw(skyboxShader, glm::mat4(glm::mat3(camera.GetViewMatrix())), projection);
+		skybox.draw(skyboxShader, view, projection);
 
 		//Draw the FPS on the HUD every second
 		if (currentFrame - lastTime >= 1.0) {
